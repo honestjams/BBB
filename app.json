@@ -1,0 +1,55 @@
+{
+  "expo": {
+    "name": "Bob's Bulk Booze",
+    "slug": "bobs-bulk-booze",
+    "version": "2.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "bobsbb",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "bundleIdentifier": "au.com.bobsbulkbooze.app",
+      "supportsTablet": false,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "au.com.bobsbulkbooze.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#A01C33",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#A01C33",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 160,
+          "dark": { "backgroundColor": "#1A1214" }
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Bob's uses your location to show the closest store first.",
+          "isAndroidBackgroundLocationEnabled": false
+        }
+      ],
+      "expo-brightness"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
