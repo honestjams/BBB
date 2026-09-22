@@ -14,7 +14,7 @@ import { getStore } from '@/data/stores';
 import { share } from '@/lib/dialogs';
 import { goBack } from '@/lib/navigation';
 import { useAppState } from '@/state/app-state';
-import { radius, space, useTheme } from '@/theme';
+import { space, useTheme } from '@/theme';
 
 /** Static web export: one HTML page per special so links can be shared. */
 export function generateStaticParams(): { id: string }[] {
@@ -77,9 +77,9 @@ export default function SpecialDetail() {
           </View>
         </View>
 
-        <View style={[styles.hero, { backgroundColor: special.tone }]}>
+        <View style={[styles.hero, { backgroundColor: special.tone, borderRadius: t.radius.lg }]}>
           <Text style={{ fontSize: 112, lineHeight: 130 }}>{special.emoji}</Text>
-          <View style={[styles.savePill, { backgroundColor: t.primary }]}>
+          <View style={[styles.savePill, { backgroundColor: t.primary, borderRadius: t.radius.pill }]}>
             <Text variant="label" style={{ color: t.primaryText }}>
               Save {savingPercent(special)}%
             </Text>
@@ -138,13 +138,12 @@ const styles = StyleSheet.create({
   iconBtn: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
   hero: {
     marginHorizontal: space.lg,
-    borderRadius: radius.lg,
     height: 240,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
   },
-  savePill: { position: 'absolute', top: space.md, left: space.md, paddingHorizontal: space.md, paddingVertical: 6, borderRadius: radius.pill },
+  savePill: { position: 'absolute', top: space.md, left: space.md, paddingHorizontal: space.md, paddingVertical: 6 },
   stickyBar: {
     position: 'absolute',
     left: 0,

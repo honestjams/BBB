@@ -5,7 +5,7 @@ import { Card } from './card';
 import { Text } from './text';
 
 import { getOpenStatus, type Store } from '@/data/stores';
-import { radius, space, useTheme } from '@/theme';
+import { space, useTheme } from '@/theme';
 
 export function OpenBadge({ store, compact }: { store: Store; compact?: boolean }) {
   const t = useTheme();
@@ -18,7 +18,7 @@ export function OpenBadge({ store, compact }: { store: Store; compact?: boolean 
       : `Open · till ${s.closesAt}`
     : `Closed · opens ${s.opensAt} ${s.opensLabel}`;
   return (
-    <View style={[styles.badge, { backgroundColor: bg }, compact && { paddingHorizontal: space.sm }]}>
+    <View style={[styles.badge, { backgroundColor: bg, borderRadius: t.radius.pill }, compact && { paddingHorizontal: space.sm }]}>
       <View style={[styles.dot, { backgroundColor: color }]} />
       <Text variant="caption" style={{ color }}>
         {label}
@@ -37,7 +37,7 @@ export function StoreRow({ store, distanceKm, isHome }: { store: Store; distance
             <View style={styles.titleRow}>
               <Text variant="heading">{store.name}</Text>
               {isHome && (
-                <View style={[styles.homePill, { backgroundColor: t.primary }]}>
+                <View style={[styles.homePill, { backgroundColor: t.primary, borderRadius: t.radius.pill }]}>
                   <Text variant="label" style={{ color: t.primaryText, fontSize: 10 }}>
                     My store
                   </Text>
@@ -68,7 +68,7 @@ export function StoreRow({ store, distanceKm, isHome }: { store: Store; distance
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: space.md },
   titleRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
-  homePill: { paddingHorizontal: space.sm, paddingVertical: 2, borderRadius: radius.pill },
+  homePill: { paddingHorizontal: space.sm, paddingVertical: 2 },
   badge: {
     alignSelf: 'flex-start',
     flexDirection: 'row',
@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: space.md,
     paddingVertical: 4,
-    borderRadius: radius.pill,
     marginTop: 2,
   },
   dot: { width: 8, height: 8, borderRadius: 4 },

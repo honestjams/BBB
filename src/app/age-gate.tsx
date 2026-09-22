@@ -3,9 +3,11 @@ import { Linking, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/button';
+import { Card } from '@/components/card';
+import { Glow } from '@/components/glow';
 import { Text } from '@/components/text';
 import { useAppState } from '@/state/app-state';
-import { brand, fonts, radius, space } from '@/theme';
+import { space, useTheme } from '@/theme';
 
 /**
  * 18+ gate, shown once. Required under the Liquor Act. Deliberately plain:
@@ -14,18 +16,21 @@ import { brand, fonts, radius, space } from '@/theme';
 export default function AgeGate() {
   const insets = useSafeAreaInsets();
   const { setAgeVerified } = useAppState();
+  const t = useTheme();
+  const g = t.ageGate;
   return (
-    <View style={[styles.screen, { paddingTop: insets.top + space.xxl, paddingBottom: insets.bottom + space.xl }]}>
+    <View style={[styles.screen, { backgroundColor: g.bg, paddingTop: insets.top + space.xxl, paddingBottom: insets.bottom + space.xl }]}>
+      <Glow />
       <View style={styles.logo}>
-        <Text style={styles.bobs}>Bob’s</Text>
-        <Text style={styles.bulk}>BULK BOOZE</Text>
+        <Text style={[styles.bobs, { fontFamily: t.fonts.display, color: g.logo }]}>Bob’s</Text>
+        <Text style={[styles.bulk, { fontFamily: t.fonts.display, color: g.logoSub }]}>BULK BOOZE</Text>
       </View>
 
-      <View style={styles.card}>
-        <Text variant="display" style={{ color: brand.burgundyDeep, textAlign: 'center' }}>
+      <Card style={{ padding: space.xl, gap: space.md, borderRadius: t.radius.lg }}>
+        <Text variant="display" style={{ color: g.title, textAlign: 'center' }}>
           Are you 18 or over?
         </Text>
-        <Text variant="body" style={{ color: brand.inkMuted, textAlign: 'center' }}>
+        <Text variant="body" style={{ color: g.body, textAlign: 'center' }}>
           You need to be 18+ to use this app. We take the Responsible Service of Alcohol seriously.
         </Text>
         <View style={{ gap: space.sm, marginTop: space.sm }}>
@@ -38,16 +43,11 @@ export default function AgeGate() {
               setAgeVerified(true);
             }}
           />
-          <Button
-            title="No, take me away"
-            variant="ghost"
-            fullWidth
-            onPress={() => Linking.openURL('https://www.drinkwise.org.au/')}
-          />
+          <Button title="No, take me away" variant="ghost" fullWidth onPress={() => Linking.openURL('https://www.drinkwise.org.au/')} />
         </View>
-      </View>
+      </Card>
 
-      <Text variant="caption" style={{ color: brand.white, opacity: 0.85, textAlign: 'center' }}>
+      <Text variant="caption" style={{ color: g.logoSub, opacity: 0.85, textAlign: 'center' }}>
         Liquor Act 2007: it is against the law to sell or supply liquor to, or to obtain on behalf of, a person under the
         age of 18 years.
       </Text>
@@ -56,9 +56,8 @@ export default function AgeGate() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: brand.orange, paddingHorizontal: space.xl, justifyContent: 'space-between' },
+  screen: { flex: 1, paddingHorizontal: space.xl, justifyContent: 'space-between' },
   logo: { alignItems: 'center' },
-  bobs: { fontFamily: fonts.display, fontSize: 64, lineHeight: 70, color: brand.burgundy },
-  bulk: { fontFamily: fonts.display, fontSize: 22, lineHeight: 26, color: brand.white, letterSpacing: 3, marginTop: -6 },
-  card: { backgroundColor: brand.white, borderRadius: radius.lg, padding: space.xl, gap: space.md },
+  bobs: { fontSize: 64, lineHeight: 70 },
+  bulk: { fontSize: 22, lineHeight: 26, letterSpacing: 3, marginTop: -6 },
 });

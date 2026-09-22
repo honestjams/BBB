@@ -7,15 +7,16 @@ import { Text } from './text';
 
 import { formatPrice, saving, type Special } from '@/data/specials';
 import { useAppState } from '@/state/app-state';
-import { fonts, radius, space, useTheme } from '@/theme';
+import { glassSurface, space, useTheme } from '@/theme';
 
 function Swatch({ special, size }: { special: Special; size: number }) {
+  const t = useTheme();
   return (
     <View
       style={{
         width: size,
         height: size,
-        borderRadius: radius.sm,
+        borderRadius: t.radius.sm,
         backgroundColor: special.tone,
         alignItems: 'center',
         justifyContent: 'center',
@@ -38,7 +39,7 @@ function HeartButton({ id }: { id: string }) {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => undefined);
         toggleFavourite(id);
       }}
-      style={[styles.heart, { backgroundColor: t.surface }]}>
+      style={[styles.heart, { backgroundColor: t.style === 'glass' ? 'rgba(20,18,30,0.55)' : t.surface }, glassSurface(t)]}>
       <Text style={{ fontSize: 16, lineHeight: 20, color: fav ? t.primary : t.textMuted }}>{fav ? '♥' : '♡'}</Text>
     </Pressable>
   );
@@ -67,11 +68,11 @@ export function SpecialTile({ special }: { special: Special }) {
               </Text>
             </View>
             <View style={styles.tilePriceRow}>
-              <Text style={{ fontFamily: fonts.display, fontSize: 24, lineHeight: 28, color: t.primary }}>
+              <Text style={{ fontFamily: t.fonts.display, fontSize: t.id === 'retail' ? 26 : 24, lineHeight: 28, color: t.id === 'retail' ? t.text : t.primary }}>
                 {formatPrice(special.memberPrice)}
               </Text>
-              <View style={[styles.savePill, { backgroundColor: t.accent }]}>
-                <Text variant="caption" style={{ color: t.accentText, fontFamily: fonts.bold, fontSize: 12 }}>
+              <View style={[styles.savePill, { backgroundColor: t.accent, borderRadius: t.radius.pill }]}>
+                <Text variant="caption" style={{ color: t.accentText, fontFamily: t.fonts.bold, fontSize: 12 }}>
                   -{formatPrice(saving(special))}
                 </Text>
               </View>
@@ -100,7 +101,7 @@ export function SpecialRow({ special }: { special: Special }) {
               {special.size}
             </Text>
             <View style={styles.rowPrice}>
-              <Text style={{ fontFamily: fonts.display, fontSize: 22, lineHeight: 26, color: t.primary }}>
+              <Text style={{ fontFamily: t.fonts.display, fontSize: t.id === 'retail' ? 24 : 22, lineHeight: 26, color: t.id === 'retail' ? t.text : t.primary }}>
                 {formatPrice(special.memberPrice)}
               </Text>
               <Text variant="caption" color="muted" style={{ textDecorationLine: 'line-through' }}>
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
   tile: { width: 156 },
   tileHeart: { position: 'absolute', top: 6, right: 6 },
   tilePriceRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  savePill: { paddingHorizontal: space.sm, paddingVertical: 2, borderRadius: radius.pill },
+  savePill: { paddingHorizontal: space.sm, paddingVertical: 2 },
   row: { flexDirection: 'row', alignItems: 'center', gap: space.md, padding: space.md },
   rowPrice: { flexDirection: 'row', alignItems: 'baseline', gap: space.sm, marginTop: 2 },
   heart: {

@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, View, type PressableProps, type ViewStyle } from
 
 import { Text } from './text';
 
-import { radius, space, tap, useTheme } from '@/theme';
+import { space, tap, useTheme } from '@/theme';
 
 type Props = Omit<PressableProps, 'style'> & {
   title: string;
@@ -16,11 +16,10 @@ type Props = Omit<PressableProps, 'style'> & {
 
 export function Button({ title, variant = 'primary', size = 'md', icon, style, fullWidth, onPress, ...rest }: Props) {
   const t = useTheme();
-  const bg =
-    variant === 'primary' ? t.primary : variant === 'accent' ? t.accent : 'transparent';
-  const fg =
-    variant === 'primary' ? t.primaryText : variant === 'accent' ? t.accentText : t.primary;
+  const bg = variant === 'primary' ? t.primary : variant === 'accent' ? t.accent : 'transparent';
+  const fg = variant === 'primary' ? t.primaryText : variant === 'accent' ? t.accentText : t.primary;
   const border = variant === 'outline' ? t.primary : 'transparent';
+  const retail = t.id === 'retail';
 
   return (
     <Pressable
@@ -33,13 +32,19 @@ export function Button({ title, variant = 'primary', size = 'md', icon, style, f
       style={({ pressed }) => [
         styles.base,
         size === 'lg' && styles.lg,
-        { backgroundColor: bg, borderColor: border, opacity: pressed ? 0.85 : 1 },
+        { backgroundColor: bg, borderColor: border, borderRadius: t.radius.pill, opacity: pressed ? 0.85 : 1 },
+        t.style === 'glass' && variant === 'primary' && { boxShadow: `0 8px 24px ${t.primary}55` },
         fullWidth && { alignSelf: 'stretch' },
         style,
       ]}>
       <View style={styles.row}>
         {icon}
-        <Text variant="bodyStrong" style={{ color: fg, fontSize: size === 'lg' ? 17 : 15 }}>
+        <Text
+          variant="bodyStrong"
+          style={[
+            { color: fg, fontSize: size === 'lg' ? 17 : 15 },
+            retail && { fontFamily: t.fonts.display, textTransform: 'uppercase', letterSpacing: 0.6, fontSize: size === 'lg' ? 19 : 16 },
+          ]}>
           {title}
         </Text>
       </View>
@@ -51,7 +56,6 @@ const styles = StyleSheet.create({
   base: {
     minHeight: tap,
     paddingHorizontal: space.xl,
-    borderRadius: radius.pill,
     borderWidth: 1.5,
     alignItems: 'center',
     justifyContent: 'center',

@@ -12,7 +12,7 @@ import { Text } from '@/components/text';
 import { campaigns, formatEnds, specials } from '@/data/specials';
 import { getStore } from '@/data/stores';
 import { useAppState } from '@/state/app-state';
-import { brand, fonts, radius, space, useTheme } from '@/theme';
+import { space, useTheme } from '@/theme';
 
 function greeting() {
   const h = new Date().getHours();
@@ -92,16 +92,18 @@ export default function HomeScreen() {
           <Pressable style={({ pressed }) => [{ opacity: pressed ? 0.92 : 1 }]}>
             <Card tone="accent" style={styles.promo}>
               <View style={{ flex: 1, gap: 2 }}>
-                <Text variant="label" style={{ color: brand.burgundyDeep }}>
+                <Text variant="label" style={{ color: t.accentText }}>
                   Bulk buys
                 </Text>
-                <Text style={[styles.promoTitle, { color: brand.burgundyDeep }]}>Buy in bulk and save!</Text>
-                <Text variant="caption" style={{ color: brand.burgundyDeep }}>
+                <Text style={[styles.promoTitle, { fontFamily: t.fonts.display, textTransform: t.displayTransform, color: t.accentText }]}>
+                  Buy in bulk and save!
+                </Text>
+                <Text variant="caption" style={{ color: t.accentText }}>
                   Weddings, clubs, work dos. Get a quote in a couple of taps.
                 </Text>
               </View>
-              <View style={[styles.promoBtn, { backgroundColor: brand.burgundy }]}>
-                <Text variant="bodyStrong" style={{ color: brand.white }}>
+              <View style={[styles.promoBtn, { backgroundColor: t.primary, borderRadius: t.radius.pill }]}>
+                <Text variant="bodyStrong" style={{ color: t.primaryText }}>
                   Get a quote
                 </Text>
               </View>
@@ -139,8 +141,8 @@ const styles = StyleSheet.create({
   storeChip: { alignItems: 'flex-end', paddingBottom: 4 },
   carousel: { paddingHorizontal: space.lg, gap: space.md },
   promo: { flexDirection: 'row', alignItems: 'center', gap: space.md },
-  promoTitle: { fontFamily: fonts.display, fontSize: 20, lineHeight: 26 },
-  promoBtn: { paddingHorizontal: space.lg, paddingVertical: space.md, borderRadius: radius.pill },
+  promoTitle: { fontSize: 20, lineHeight: 26 },
+  promoBtn: { paddingHorizontal: space.lg, paddingVertical: space.md },
   guarantee: { flexDirection: 'row', alignItems: 'center', gap: space.md },
   guaranteeIcon: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center' },
 });

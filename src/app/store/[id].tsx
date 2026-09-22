@@ -11,7 +11,7 @@ import { Text } from '@/components/text';
 import { getStore, stores } from '@/data/stores';
 import { goBack } from '@/lib/navigation';
 import { useAppState } from '@/state/app-state';
-import { radius, space, useTheme } from '@/theme';
+import { space, useTheme } from '@/theme';
 
 /** Static web export: one HTML page per store. */
 export function generateStaticParams(): { id: string }[] {
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: space.lg,
     minHeight: 52,
-    borderRadius: radius.sm,
+    borderRadius: 6,
   },
   homeCard: { flexDirection: 'row', alignItems: 'center', gap: space.md },
 });

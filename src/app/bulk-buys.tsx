@@ -10,7 +10,7 @@ import { Text } from '@/components/text';
 import { stores } from '@/data/stores';
 import { goBack } from '@/lib/navigation';
 import { useAppState } from '@/state/app-state';
-import { fonts, radius, space, useTheme } from '@/theme';
+import { space, useTheme } from '@/theme';
 
 const occasions = ['Wedding', 'Party', 'Sports club', 'Work event', 'Other'] as const;
 
@@ -52,7 +52,7 @@ export default function BulkBuys() {
     Linking.openURL(`mailto:hello@bobsbulkbooze.com.au?subject=${subject}&body=${body}`).catch(() => undefined);
   }
 
-  const inputStyle = [styles.input, { backgroundColor: t.surface, borderColor: t.line, color: t.text }];
+  const inputStyle = [styles.input, { backgroundColor: t.surface, borderColor: t.style === 'glass' ? t.surfaceBorder : t.line, color: t.text, fontFamily: t.fonts.regular, borderRadius: t.radius.md }];
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -157,10 +157,8 @@ const styles = StyleSheet.create({
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
   input: {
     borderWidth: 1,
-    borderRadius: radius.md,
     paddingHorizontal: space.lg,
     paddingVertical: space.md,
-    fontFamily: fonts.regular,
     fontSize: 15,
     minHeight: 52,
   },

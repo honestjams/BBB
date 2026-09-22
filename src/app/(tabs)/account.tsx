@@ -12,7 +12,7 @@ import { specials } from '@/data/specials';
 import { getStore } from '@/data/stores';
 import { confirm, notice } from '@/lib/dialogs';
 import { useAppState } from '@/state/app-state';
-import { brand, fonts, radius, space, useTheme } from '@/theme';
+import { space, useTheme } from '@/theme';
 
 function Row({ label, value, onPress, href }: { label: string; value?: string; onPress?: () => void; href?: string }) {
   const t = useTheme();
@@ -58,14 +58,15 @@ export default function AccountScreen() {
         <Card tone="primary" style={{ gap: space.md }}>
           <View style={styles.pointsRow}>
             <View>
-              <Text variant="label" style={{ color: brand.orange }}>
+              <Text variant="label" style={{ color: t.memberCard.accent }}>
                 Points balance
               </Text>
-              <Text style={styles.points}>{member.points.toLocaleString('en-AU')}</Text>
+              <Text style={[styles.points, { fontFamily: t.fonts.display, color: t.memberCard.text }]}>{member.points.toLocaleString('en-AU')}</Text>
             </View>
             <Link href="/card" asChild>
-              <Pressable accessibilityRole="button" style={styles.cardBtn}>
-                <Text variant="bodyStrong" style={{ color: brand.burgundyDeep }}>
+              {/* Link asChild children must get a single style object, not an array (expo-router web check). */}
+              <Pressable accessibilityRole="button" style={{ ...styles.cardBtn, backgroundColor: t.accent, borderRadius: t.radius.pill }}>
+                <Text variant="bodyStrong" style={{ color: t.accentText }}>
                   Show card
                 </Text>
               </Pressable>
@@ -73,9 +74,9 @@ export default function AccountScreen() {
           </View>
           <View>
             <View style={styles.track}>
-              <View style={[styles.fill, { width: `${Math.round(progress * 100)}%` }]} />
+              <View style={[styles.fill, { width: `${Math.round(progress * 100)}%`, backgroundColor: t.memberCard.accent }]} />
             </View>
-            <Text variant="caption" style={{ color: brand.white, opacity: 0.9, marginTop: 6 }}>
+            <Text variant="caption" style={{ color: t.memberCard.text, opacity: 0.9, marginTop: 6 }}>
               {member.pointsToNextReward} points to your next reward
             </Text>
           </View>
@@ -144,6 +145,7 @@ export default function AccountScreen() {
       <Section title="More">
         <View style={styles.pad}>
           <Card padded={false}>
+            <Row label="Appearance" value="Showcase" href="/theme" />
             <Row label="Bob's Beat Down Guarantee" href="/beat-down" />
             <Row label="Bulk buys and quotes" href="/bulk-buys" />
             <Row label="Careers" onPress={() => Linking.openURL('https://bobsbulkbooze.com.au/careers/')} />
@@ -169,10 +171,10 @@ export default function AccountScreen() {
 const styles = StyleSheet.create({
   pad: { paddingHorizontal: space.lg },
   pointsRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: space.md },
-  points: { fontFamily: fonts.display, fontSize: 40, lineHeight: 46, color: brand.white },
-  cardBtn: { paddingHorizontal: space.lg, minHeight: 44, borderRadius: radius.pill, justifyContent: 'center', backgroundColor: brand.orange },
+  points: { fontSize: 40, lineHeight: 46 },
+  cardBtn: { paddingHorizontal: space.lg, minHeight: 44, justifyContent: 'center' },
   track: { height: 8, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.25)', overflow: 'hidden' },
-  fill: { height: 8, borderRadius: 4, backgroundColor: brand.orange },
+  fill: { height: 8, borderRadius: 4 },
   row: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -34,6 +34,13 @@ Run lint and typecheck before declaring any task done.
 Use EAS to build, sign, and submit the app in the cloud (`eas build`, `eas submit`) and to ship over-the-air updates (`eas update`) — no local Xcode or Android Studio required. Run EAS CLI as `bunx eas-cli <command>` in Bun projects, or `npx eas-cli@latest <command>` otherwise; substitute that for bare `eas` in docs examples.
 Docs: https://docs.expo.dev/eas/index.md
 
+## Theming
+
+- Three design directions live in `src/theme/themes.ts`; the active one comes from `useTheme()`. Never hard-code `brand.*`, `fonts.*` or `radius.*` in components: use `t.primary`, `t.fonts.display`, `t.radius.md`, `t.memberCard.*` and so on so every theme restyles the screen.
+- `Card`, `Chip`, `Button`, `Text`, `MemberCard` and `PriceTag` are the themed primitives. Build screens from them.
+- The glass theme relies on `glassSurface(t)` (translucent fill, hairline border, backdrop blur on web) and `<Glow />` behind full-screen views.
+- A child of `<Link asChild>` must receive a single plain style object (no arrays, no functions); Expo Router's web slot merges styles by spreading.
+
 ## Web
 
 - Web-only layout lives in `.web.tsx` files (for example `src/app/(tabs)/_layout.web.tsx`); keep the native file alongside it.

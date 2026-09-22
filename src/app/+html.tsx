@@ -34,20 +34,33 @@ export default function Root({ children }: PropsWithChildren) {
         <link rel="icon" href="/favicon.ico" sizes="48x48" />
         <link rel="icon" href="/icons/icon-192.png" type="image/png" sizes="192x192" />
         <ScrollViewStyleReset />
-        <style dangerouslySetInnerHTML={{ __html: responsiveBackground }} />
+        <style dangerouslySetInnerHTML={{ __html: responsiveLayout }} />
       </head>
       <body>{children}</body>
     </html>
   );
 }
 
-const responsiveBackground = `
+const responsiveLayout = `
 html, body { background: ${brand.cream}; }
 @media (prefers-color-scheme: dark) { html, body { background: #1A1214; } }
-/* Wide screens: the app sits in a phone-width frame on a branded backdrop. */
-@media (min-width: 640px) {
-  html, body { background: ${brand.burgundyDeep}; }
-  #app-frame { max-width: 520px; box-shadow: 0 0 0 1px rgba(0,0,0,0.35), 0 24px 64px rgba(0,0,0,0.35); }
-}
 input, textarea { outline-color: ${brand.burgundy}; }
+/* Narrow screens: the app fills the viewport; the showcase panel is hidden and a floating button opens the picker. */
+#showcase-panel { display: none; }
+/* Wide screens: phone-sized frame on a branded backdrop with the showcase panel beside it. */
+@media (min-width: 900px) {
+  #showcase-panel { display: flex; }
+  #showcase-fab { display: none; }
+  #app-frame {
+    flex: 0 0 auto;
+    width: 430px;
+    align-self: center;
+    height: min(920px, calc(100vh - 48px));
+    border-radius: 44px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 0 0 10px rgba(0,0,0,0.35), 0 40px 80px rgba(0,0,0,0.45);
+  }
+}
+@media (min-width: 640px) and (max-width: 899px) {
+  #app-frame { flex: 0 0 auto; width: 520px; align-self: stretch; box-shadow: 0 0 0 1px rgba(0,0,0,0.35); }
+}
 `;

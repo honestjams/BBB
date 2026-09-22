@@ -5,20 +5,26 @@ import QRCode from 'react-native-qrcode-svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/button';
+import { Glow } from '@/components/glow';
 import { Text } from '@/components/text';
 import { getStore } from '@/data/stores';
 import { goBack } from '@/lib/navigation';
 import { useAppState } from '@/state/app-state';
-import { brand, fonts, radius, space } from '@/theme';
+import { space, useTheme } from '@/theme';
 
 /**
  * Full-screen member card. Brightness goes to max while it is open so the
- * counter scanner reads it first time, then restores on close.
+ * counter scanner reads it first time, then restores on close. The QR panel
+ * is always white with a dark code regardless of theme, for the scanner.
  */
 export default function CardScreen() {
   const insets = useSafeAreaInsets();
   const { member, homeStoreId } = useAppState();
   const store = getStore(homeStoreId);
+  const t = useTheme();
+  const c = t.memberCard;
+  // Glass card colours are translucent; the full-screen view needs a solid backdrop behind them.
+  const screenBg = t.style === 'glass' ? t.bg : c.bg;
 
   useEffect(() => {
     let previous: number | null = null;
@@ -47,25 +53,26 @@ export default function CardScreen() {
   }, []);
 
   return (
-    <View style={[styles.screen, { paddingTop: insets.top + space.lg, paddingBottom: insets.bottom + space.lg }]}>
+    <View style={[styles.screen, { backgroundColor: screenBg, paddingTop: insets.top + space.lg, paddingBottom: insets.bottom + space.lg }]}>
+      <Glow />
       <View style={styles.header}>
         <View>
-          <Text variant="label" style={{ color: brand.orange }}>
+          <Text variant="label" style={{ color: c.accent }}>
             {member.tier}
           </Text>
-          <Text style={styles.name}>
+          <Text style={[styles.name, { fontFamily: t.fonts.bold, color: c.text }]}>
             {member.firstName} {member.lastName}
           </Text>
         </View>
         <Pressable accessibilityRole="button" accessibilityLabel="Close" onPress={() => goBack()} hitSlop={12} style={styles.close}>
-          <Text style={{ color: brand.white, fontSize: 20, lineHeight: 24 }}>✕</Text>
+          <Text style={{ color: c.text, fontSize: 20, lineHeight: 24 }}>✕</Text>
         </Pressable>
       </View>
 
-      <View style={styles.qrCard}>
-        <QRCode value={member.memberNumber} size={240} backgroundColor={brand.white} color={brand.burgundyDeep} quietZone={8} />
-        <Text style={styles.number}>{member.memberNumber.replace(/(\d{4})(\d{4})/, '$1 $2')}</Text>
-        <Text variant="caption" style={{ color: brand.inkMuted, textAlign: 'center' }}>
+      <View style={[styles.qrCard, { borderRadius: t.radius.lg }]}>
+        <QRCode value={member.memberNumber} size={240} backgroundColor="#FFFFFF" color={c.qr} quietZone={8} />
+        <Text style={[styles.number, { fontFamily: t.fonts.display, color: c.qr }]}>{member.memberNumber.replace(/(\d{4})(\d{4})/, '$1 $2')}</Text>
+        <Text variant="caption" style={{ color: '#6E6560', textAlign: 'center' }}>
           Show this at the counter. Member pricing applies automatically.
         </Text>
       </View>
@@ -73,15 +80,15 @@ export default function CardScreen() {
       <View style={{ gap: space.md, alignItems: 'center' }}>
         <View style={styles.pointsRow}>
           <View style={styles.stat}>
-            <Text style={styles.statValue}>{member.points.toLocaleString('en-AU')}</Text>
-            <Text variant="label" style={{ color: brand.white, opacity: 0.8 }}>
+            <Text style={[styles.statValue, { fontFamily: t.fonts.display, color: c.text }]}>{member.points.toLocaleString('en-AU')}</Text>
+            <Text variant="label" style={{ color: c.subtle }}>
               points
             </Text>
           </View>
           <View style={styles.divider} />
           <View style={styles.stat}>
-            <Text style={styles.statValue}>{store?.name ?? '—'}</Text>
-            <Text variant="label" style={{ color: brand.white, opacity: 0.8 }}>
+            <Text style={[styles.statValue, { fontFamily: t.fonts.display, color: c.text }]}>{store?.name ?? '—'}</Text>
+            <Text variant="label" style={{ color: c.subtle }}>
               my store
             </Text>
           </View>
@@ -95,12 +102,11 @@ export default function CardScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: brand.burgundy,
     paddingHorizontal: space.xl,
     justifyContent: 'space-between',
   },
   header: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' },
-  name: { fontFamily: fonts.bold, fontSize: 22, lineHeight: 28, color: brand.white },
+  name: { fontSize: 22, lineHeight: 28 },
   close: {
     width: 44,
     height: 44,
@@ -111,17 +117,16 @@ const styles = StyleSheet.create({
   },
   qrCard: {
     alignSelf: 'center',
-    backgroundColor: brand.white,
-    borderRadius: radius.lg,
+    backgroundColor: '#FFFFFF',
     padding: space.xl,
     alignItems: 'center',
     gap: space.md,
     width: '100%',
     maxWidth: 340,
   },
-  number: { fontFamily: fonts.display, fontSize: 28, lineHeight: 34, color: brand.burgundyDeep, letterSpacing: 2 },
+  number: { fontSize: 28, lineHeight: 34, letterSpacing: 2 },
   pointsRow: { flexDirection: 'row', alignItems: 'center', gap: space.xl },
   stat: { alignItems: 'center', gap: 2 },
-  statValue: { fontFamily: fonts.display, fontSize: 22, lineHeight: 28, color: brand.white },
+  statValue: { fontSize: 22, lineHeight: 28 },
   divider: { width: 1, height: 36, backgroundColor: 'rgba(255,255,255,0.3)' },
 });

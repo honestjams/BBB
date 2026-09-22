@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 import { member as mockMember, type Member } from '@/data/member';
+import { DEFAULT_THEME, type ThemeId } from '@/theme/themes';
 
 type Persisted = {
   ageVerified: boolean;
@@ -9,6 +10,8 @@ type Persisted = {
   favourites: string[];
   notifyWeekly: boolean;
   notifyWine: boolean;
+  /** Design direction chosen in the showcase switcher. */
+  themeId: ThemeId;
 };
 
 const DEFAULTS: Persisted = {
@@ -17,6 +20,7 @@ const DEFAULTS: Persisted = {
   favourites: [],
   notifyWeekly: true,
   notifyWine: true,
+  themeId: DEFAULT_THEME,
 };
 
 const KEY = 'bbb.state.v1';
@@ -29,6 +33,7 @@ type AppState = Persisted & {
   toggleFavourite: (id: string) => void;
   isFavourite: (id: string) => boolean;
   setNotify: (key: 'notifyWeekly' | 'notifyWine', v: boolean) => void;
+  setTheme: (id: ThemeId) => void;
 };
 
 const Ctx = createContext<AppState | null>(null);
@@ -40,7 +45,11 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     AsyncStorage.getItem(KEY)
       .then((raw) => {
-        if (raw) setState({ ...DEFAULTS, ...(JSON.parse(raw) as Partial<Persisted>) });
+        if (raw) {
+          const saved = JSON.parse(raw) as Partial<Persisted>;
+          if (saved.themeId && !['classic', 'glass', 'retail'].includes(saved.themeId)) delete saved.themeId;
+          setState({ ...DEFAULTS, ...saved });
+        }
       })
       .catch(() => undefined)
       .finally(() => setReady(true));
@@ -67,6 +76,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         })),
       isFavourite: (id) => state.favourites.includes(id),
       setNotify: (key, v) => update({ [key]: v }),
+      setTheme: (id) => update({ themeId: id }),
     }),
     [state, ready, update],
   );

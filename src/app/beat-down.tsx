@@ -6,17 +6,17 @@ import { Screen } from '@/components/screen';
 import { Text } from '@/components/text';
 import { beatDownTerms } from '@/data/member';
 import { goBack } from '@/lib/navigation';
-import { brand, fonts, radius, space, useTheme } from '@/theme';
+import { space, useTheme } from '@/theme';
 
 export default function BeatDown() {
   const t = useTheme();
   const insets = useSafeAreaInsets();
   return (
     <Screen tabbed={false} contentContainerStyle={{ paddingTop: space.xl, paddingBottom: insets.bottom + space.xl }}>
-      <View style={[styles.hero, { backgroundColor: brand.orange }]}>
+      <View style={[styles.hero, { backgroundColor: t.accent, borderRadius: t.radius.lg }]}>
         <Text style={{ fontSize: 44, lineHeight: 52 }}>🥊</Text>
-        <Text style={styles.heroTitle}>Bob’s Beat Down Guarantee</Text>
-        <Text variant="bodyStrong" style={{ color: brand.burgundyDeep, textAlign: 'center' }}>
+        <Text style={[styles.heroTitle, { fontFamily: t.fonts.display, textTransform: t.displayTransform, color: t.accentText }]}>Bob’s Beat Down Guarantee</Text>
+        <Text variant="bodyStrong" style={{ color: t.accentText, textAlign: 'center' }}>
           If we’re not already cheaper, we’ll beat every price.
         </Text>
       </View>
@@ -48,8 +48,8 @@ export default function BeatDown() {
 
 const styles = StyleSheet.create({
   pad: { paddingHorizontal: space.lg },
-  hero: { marginHorizontal: space.lg, borderRadius: radius.lg, padding: space.xl, alignItems: 'center', gap: space.sm },
-  heroTitle: { fontFamily: fonts.display, fontSize: 26, lineHeight: 32, color: brand.burgundy, textAlign: 'center' },
+  hero: { marginHorizontal: space.lg, padding: space.xl, alignItems: 'center', gap: space.sm },
+  heroTitle: { fontSize: 26, lineHeight: 32, textAlign: 'center' },
   term: { flexDirection: 'row', gap: space.md, alignItems: 'flex-start' },
   bullet: { width: 6, height: 6, borderRadius: 3, marginTop: 7 },
 });

@@ -9,7 +9,7 @@ import { StoreRow } from '@/components/store-row';
 import { Text } from '@/components/text';
 import { distanceKm, stores } from '@/data/stores';
 import { useAppState } from '@/state/app-state';
-import { radius, space, useTheme } from '@/theme';
+import { space, useTheme } from '@/theme';
 
 type Coords = { lat: number; lng: number };
 
@@ -68,7 +68,7 @@ export default function StoresScreen() {
             <Pressable
               accessibilityRole="button"
               onPress={locate}
-              style={({ pressed }) => [styles.locateBtn, { backgroundColor: t.primary, opacity: pressed ? 0.85 : 1 }]}>
+              style={({ pressed }) => [styles.locateBtn, { backgroundColor: t.primary, borderRadius: t.radius.pill, opacity: pressed ? 0.85 : 1 }]}>
               <Text variant="bodyStrong" style={{ color: t.primaryText }}>
                 Use location
               </Text>
@@ -96,5 +96,5 @@ export default function StoresScreen() {
 const styles = StyleSheet.create({
   pad: { paddingHorizontal: space.lg },
   locate: { flexDirection: 'row', alignItems: 'center', gap: space.md },
-  locateBtn: { paddingHorizontal: space.lg, minHeight: 44, borderRadius: radius.pill, justifyContent: 'center' },
+  locateBtn: { paddingHorizontal: space.lg, minHeight: 44, justifyContent: 'center' },
 });

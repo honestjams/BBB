@@ -9,7 +9,7 @@ import { SpecialRow } from '@/components/special-card';
 import { Text } from '@/components/text';
 import { campaigns, categories, formatEnds, specials, type Category } from '@/data/specials';
 import { useAppState } from '@/state/app-state';
-import { fonts, radius, space, useTheme } from '@/theme';
+import { glassSurface, space, useTheme } from '@/theme';
 
 type Filter = Category | 'all' | 'saved';
 
@@ -33,7 +33,7 @@ export default function SpecialsScreen() {
   return (
     <Screen title="Specials" eyebrow={`${specials.length} deals on now`}>
       <View style={styles.pad}>
-        <View style={[styles.search, { backgroundColor: t.surface, borderColor: t.line }]}>
+        <View style={[styles.search, { backgroundColor: t.surface, borderColor: t.style === 'glass' ? t.surfaceBorder : t.line, borderRadius: t.radius.pill }, glassSurface(t)]}>
           <Text color="muted" style={{ fontSize: 16, lineHeight: 20 }}>
             ⌕
           </Text>
@@ -44,7 +44,7 @@ export default function SpecialsScreen() {
             placeholderTextColor={t.textMuted}
             autoCorrect={false}
             clearButtonMode="while-editing"
-            style={[styles.input, { color: t.text }]}
+            style={[styles.input, { color: t.text, fontFamily: t.fonts.regular }]}
             accessibilityLabel="Search specials"
           />
         </View>
@@ -66,7 +66,7 @@ export default function SpecialsScreen() {
 
       <View style={[styles.pad, { gap: space.md }]}>
         {list.length === 0 ? (
-          <View style={[styles.empty, { backgroundColor: t.surface }]}>
+          <View style={[styles.empty, { backgroundColor: t.surface, borderRadius: t.radius.md }]}>
             <Text style={{ fontSize: 32, lineHeight: 40 }}>{filter === 'saved' ? '♡' : '🔍'}</Text>
             <Text variant="heading" style={{ textAlign: 'center' }}>
               {filter === 'saved' ? 'Nothing saved yet' : 'No specials match'}
@@ -101,11 +101,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: space.sm,
     borderWidth: 1,
-    borderRadius: radius.pill,
     paddingHorizontal: space.lg,
     minHeight: 52,
   },
-  input: { flex: 1, fontFamily: fonts.regular, fontSize: 15, paddingVertical: space.md },
+  input: { flex: 1, fontSize: 15, paddingVertical: space.md },
   chips: { paddingHorizontal: space.lg, gap: space.sm },
-  empty: { padding: space.xl, borderRadius: radius.md, alignItems: 'center', gap: space.sm },
+  empty: { padding: space.xl, alignItems: 'center', gap: space.sm },
 });

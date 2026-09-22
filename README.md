@@ -34,6 +34,20 @@ npx expo run:ios        # dev build with all native modules
 
 `npm run typecheck` and `npm run lint` should both be clean.
 
+## Design directions (showcase)
+
+For the business presentation the app ships with a theme switcher. On wide screens a
+"Design directions" panel sits beside the phone frame; on phones the 🎨 button (or
+You → Appearance) opens the same picker. The choice persists per device.
+
+- **Bob's Classic**: the brand as it is today (burgundy, orange, Alfa Slab One).
+- **Glass**: dark glow backdrop, frosted translucent cards, floating glass dock, Outfit type.
+- **Big Box**: price-led retail in the style of the majors (deep green, yellow, Oswald condensed).
+
+Themes are full token sets in `src/theme/themes.ts` (colour, type, radius, surface style,
+member-card and age-gate palettes). `useTheme()` returns the active one; components read
+`t.fonts`, `t.radius`, `t.style` rather than static tokens.
+
 ## Web and Vercel
 
 `npm run build` runs `expo export -p web` and writes a static site to `dist/` (one HTML page

@@ -2,7 +2,7 @@ import { Pressable, StyleSheet } from 'react-native';
 
 import { Text } from './text';
 
-import { radius, space, useTheme } from '@/theme';
+import { glassSurface, space, useTheme } from '@/theme';
 
 type Props = { label: string; selected?: boolean; onPress?: () => void };
 
@@ -16,10 +16,12 @@ export function Chip({ label, selected, onPress }: Props) {
       style={({ pressed }) => [
         styles.chip,
         {
+          borderRadius: t.radius.pill,
           backgroundColor: selected ? t.primary : t.surface,
-          borderColor: selected ? t.primary : t.line,
+          borderColor: selected ? t.primary : t.style === 'glass' ? t.surfaceBorder : t.line,
           opacity: pressed ? 0.85 : 1,
         },
+        !selected && glassSurface(t),
       ]}>
       <Text variant="caption" style={{ color: selected ? t.primaryText : t.text }}>
         {label}
@@ -32,7 +34,6 @@ const styles = StyleSheet.create({
   chip: {
     minHeight: 40,
     paddingHorizontal: space.lg,
-    borderRadius: radius.pill,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
