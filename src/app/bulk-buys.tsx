@@ -1,5 +1,4 @@
 import * as Haptics from 'expo-haptics';
-import { router } from 'expo-router';
 import { useState } from 'react';
 import { KeyboardAvoidingView, Linking, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
 
@@ -9,6 +8,7 @@ import { Chip } from '@/components/chip';
 import { Screen } from '@/components/screen';
 import { Text } from '@/components/text';
 import { stores } from '@/data/stores';
+import { goBack } from '@/lib/navigation';
 import { useAppState } from '@/state/app-state';
 import { fonts, radius, space, useTheme } from '@/theme';
 
@@ -58,7 +58,7 @@ export default function BulkBuys() {
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <Screen tabbed={false} contentContainerStyle={{ paddingTop: space.lg }}>
         <View style={styles.topBar}>
-          <Pressable accessibilityRole="button" accessibilityLabel="Close" onPress={() => router.back()} hitSlop={12} style={[styles.iconBtn, { backgroundColor: t.surface }]}>
+          <Pressable accessibilityRole="button" accessibilityLabel="Close" onPress={() => goBack()} hitSlop={12} style={[styles.iconBtn, { backgroundColor: t.surface }]}>
             <Text style={{ fontSize: 18, lineHeight: 22 }}>✕</Text>
           </Pressable>
         </View>
@@ -83,7 +83,7 @@ export default function BulkBuys() {
               <Text variant="caption" color="muted" style={{ textAlign: 'center' }}>
                 We opened your mail app with everything filled in. Hit send and {store?.name} will be in touch.
               </Text>
-              <Button title="Done" onPress={() => router.back()} style={{ marginTop: space.sm }} />
+              <Button title="Done" onPress={() => goBack()} style={{ marginTop: space.sm }} />
             </Card>
           </View>
         ) : (

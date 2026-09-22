@@ -1,5 +1,5 @@
 import * as Haptics from 'expo-haptics';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { Linking, Platform, Pressable, StyleSheet, View } from 'react-native';
 
 import { Button } from '@/components/button';
@@ -8,9 +8,15 @@ import { RsaFooter } from '@/components/rsa-footer';
 import { Screen } from '@/components/screen';
 import { OpenBadge } from '@/components/store-row';
 import { Text } from '@/components/text';
-import { getStore } from '@/data/stores';
+import { getStore, stores } from '@/data/stores';
+import { goBack } from '@/lib/navigation';
 import { useAppState } from '@/state/app-state';
 import { radius, space, useTheme } from '@/theme';
+
+/** Static web export: one HTML page per store. */
+export function generateStaticParams(): { id: string }[] {
+  return stores.map((s) => ({ id: s.id }));
+}
 
 export default function StoreDetail() {
   const t = useTheme();
@@ -22,7 +28,7 @@ export default function StoreDetail() {
     return (
       <Screen tabbed={false} title="Store not found">
         <View style={styles.pad}>
-          <Button title="Back" onPress={() => router.back()} />
+          <Button title="Back" onPress={() => goBack('/stores')} />
         </View>
       </Screen>
     );
@@ -39,7 +45,7 @@ export default function StoreDetail() {
   return (
     <Screen tabbed={false} contentContainerStyle={{ paddingTop: space.lg }}>
       <View style={styles.topBar}>
-        <Pressable accessibilityRole="button" accessibilityLabel="Back" onPress={() => router.back()} hitSlop={12} style={[styles.iconBtn, { backgroundColor: t.surface }]}>
+        <Pressable accessibilityRole="button" accessibilityLabel="Back" onPress={() => goBack('/stores')} hitSlop={12} style={[styles.iconBtn, { backgroundColor: t.surface }]}>
           <Text style={{ fontSize: 20, lineHeight: 24 }}>‹</Text>
         </Pressable>
       </View>

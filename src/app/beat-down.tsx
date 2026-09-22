@@ -1,4 +1,3 @@
-import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -6,6 +5,7 @@ import { Button } from '@/components/button';
 import { Screen } from '@/components/screen';
 import { Text } from '@/components/text';
 import { beatDownTerms } from '@/data/member';
+import { goBack } from '@/lib/navigation';
 import { brand, fonts, radius, space, useTheme } from '@/theme';
 
 export default function BeatDown() {
@@ -40,7 +40,7 @@ export default function BeatDown() {
             </View>
           ))}
         </View>
-        <Button title="Got it" size="lg" fullWidth onPress={() => router.back()} style={{ marginTop: space.md }} />
+        <Button title="Got it" size="lg" fullWidth onPress={() => goBack()} style={{ marginTop: space.md }} />
       </View>
     </Screen>
   );

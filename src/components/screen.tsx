@@ -1,4 +1,5 @@
-import { ScrollView, StyleSheet, View, type ScrollViewProps } from 'react-native';
+import Head from 'expo-router/head';
+import { Platform, ScrollView, StyleSheet, View, type ScrollViewProps } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Text } from './text';
@@ -17,6 +18,12 @@ export function Screen({ title, eyebrow, right, tabbed = true, children, content
   const t = useTheme();
   const insets = useSafeAreaInsets();
   return (
+    <>
+    {Platform.OS === 'web' && title && (
+      <Head>
+        <title>{`${title} · Bob’s Bulk Booze`}</title>
+      </Head>
+    )}
     <ScrollView
       style={{ flex: 1, backgroundColor: t.bg }}
       contentInsetAdjustmentBehavior="automatic"
@@ -42,6 +49,7 @@ export function Screen({ title, eyebrow, right, tabbed = true, children, content
       )}
       {children}
     </ScrollView>
+    </>
   );
 }
 

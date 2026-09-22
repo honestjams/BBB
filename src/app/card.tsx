@@ -1,5 +1,4 @@
 import * as Brightness from 'expo-brightness';
-import { router } from 'expo-router';
 import { useEffect } from 'react';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
@@ -8,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '@/components/button';
 import { Text } from '@/components/text';
 import { getStore } from '@/data/stores';
+import { goBack } from '@/lib/navigation';
 import { useAppState } from '@/state/app-state';
 import { brand, fonts, radius, space } from '@/theme';
 
@@ -57,7 +57,7 @@ export default function CardScreen() {
             {member.firstName} {member.lastName}
           </Text>
         </View>
-        <Pressable accessibilityRole="button" accessibilityLabel="Close" onPress={() => router.back()} hitSlop={12} style={styles.close}>
+        <Pressable accessibilityRole="button" accessibilityLabel="Close" onPress={() => goBack()} hitSlop={12} style={styles.close}>
           <Text style={{ color: brand.white, fontSize: 20, lineHeight: 24 }}>✕</Text>
         </Pressable>
       </View>
@@ -86,7 +86,7 @@ export default function CardScreen() {
             </Text>
           </View>
         </View>
-        <Button title="Done" variant="accent" size="lg" onPress={() => router.back()} style={{ minWidth: 200 }} />
+        <Button title="Done" variant="accent" size="lg" onPress={() => goBack()} style={{ minWidth: 200 }} />
       </View>
     </View>
   );

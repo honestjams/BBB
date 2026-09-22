@@ -1,5 +1,5 @@
 import { Link } from 'expo-router';
-import { Alert, Linking, Pressable, StyleSheet, Switch, View } from 'react-native';
+import { Linking, Pressable, StyleSheet, Switch, View } from 'react-native';
 
 import { Card } from '@/components/card';
 import { RsaFooter } from '@/components/rsa-footer';
@@ -10,6 +10,7 @@ import { Text } from '@/components/text';
 import { benefits } from '@/data/member';
 import { specials } from '@/data/specials';
 import { getStore } from '@/data/stores';
+import { confirm, notice } from '@/lib/dialogs';
 import { useAppState } from '@/state/app-state';
 import { brand, fonts, radius, space, useTheme } from '@/theme';
 
@@ -63,7 +64,7 @@ export default function AccountScreen() {
               <Text style={styles.points}>{member.points.toLocaleString('en-AU')}</Text>
             </View>
             <Link href="/card" asChild>
-              <Pressable accessibilityRole="button" style={[styles.cardBtn, { backgroundColor: brand.orange }]}>
+              <Pressable accessibilityRole="button" style={styles.cardBtn}>
                 <Text variant="bodyStrong" style={{ color: brand.burgundyDeep }}>
                   Show card
                 </Text>
@@ -81,10 +82,10 @@ export default function AccountScreen() {
         </Card>
 
         <Card padded={false}>
-          <Row label="Member number" value={member.memberNumber} onPress={() => Alert.alert('Member number', member.memberNumber)} />
+          <Row label="Member number" value={member.memberNumber} onPress={() => notice('Member number', member.memberNumber)} />
           <Row label="My store" value={store?.name} href="/stores" />
-          <Row label="Mobile" value={member.mobile} onPress={() => Alert.alert('Update details', 'Update your details at the counter or call your store.')} />
-          <Row label="Email" value={member.email} onPress={() => Alert.alert('Update details', 'Update your details at the counter or call your store.')} />
+          <Row label="Mobile" value={member.mobile} onPress={() => notice('Update details', 'Update your details at the counter or call your store.')} />
+          <Row label="Email" value={member.email} onPress={() => notice('Update details', 'Update your details at the counter or call your store.')} />
         </Card>
       </View>
 
@@ -151,7 +152,7 @@ export default function AccountScreen() {
             <Row
               label="Sign out"
               onPress={() =>
-                Alert.alert('Sign out?', 'You will need to confirm your age again next time.', [
+                confirm('Sign out?', 'You will need to confirm your age again next time.', [
                   { text: 'Cancel', style: 'cancel' },
                   { text: 'Sign out', style: 'destructive', onPress: () => setAgeVerified(false) },
                 ])
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
   pad: { paddingHorizontal: space.lg },
   pointsRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: space.md },
   points: { fontFamily: fonts.display, fontSize: 40, lineHeight: 46, color: brand.white },
-  cardBtn: { paddingHorizontal: space.lg, minHeight: 44, borderRadius: radius.pill, justifyContent: 'center' },
+  cardBtn: { paddingHorizontal: space.lg, minHeight: 44, borderRadius: radius.pill, justifyContent: 'center', backgroundColor: brand.orange },
   track: { height: 8, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.25)', overflow: 'hidden' },
   fill: { height: 8, borderRadius: 4, backgroundColor: brand.orange },
   row: {

@@ -1,4 +1,4 @@
-This is an Expo/React Native mobile application. Prioritize mobile-first patterns, performance, and cross-platform compatibility.
+This is an Expo/React Native application that ships to iOS, Android **and the web**. The web build is a static export (`expo export -p web`) deployed on Vercel by pushing to `main`. Prioritize mobile-first patterns, performance, and cross-platform compatibility; every change must work on web too (`npm run build` must pass and the screen must render in a browser).
 
 ## Expo has changed — do not trust your training data
 
@@ -33,6 +33,14 @@ Run lint and typecheck before declaring any task done.
 
 Use EAS to build, sign, and submit the app in the cloud (`eas build`, `eas submit`) and to ship over-the-air updates (`eas update`) — no local Xcode or Android Studio required. Run EAS CLI as `bunx eas-cli <command>` in Bun projects, or `npx eas-cli@latest <command>` otherwise; substitute that for bare `eas` in docs examples.
 Docs: https://docs.expo.dev/eas/index.md
+
+## Web
+
+- Web-only layout lives in `.web.tsx` files (for example `src/app/(tabs)/_layout.web.tsx`); keep the native file alongside it.
+- `Alert` and `Share` are no-ops in react-native-web. Use `notice`/`confirm`/`share` from `src/lib/dialogs.ts`.
+- Use `goBack()` from `src/lib/navigation.ts` instead of `router.back()` in close buttons, so deep links on web still have somewhere to go.
+- New dynamic routes need `generateStaticParams` so the static export emits a page per item.
+- Global `<head>` tags go in `src/app/+html.tsx`; per-screen titles go through `Screen`'s `title` prop.
 
 ## Rules
 

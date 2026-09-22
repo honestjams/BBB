@@ -1,6 +1,6 @@
 import * as Haptics from 'expo-haptics';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Pressable, Share, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/button';
@@ -9,10 +9,17 @@ import { PriceTag } from '@/components/price';
 import { RsaFooter } from '@/components/rsa-footer';
 import { Screen } from '@/components/screen';
 import { Text } from '@/components/text';
-import { campaigns, formatEnds, formatPrice, getSpecial, savingPercent } from '@/data/specials';
+import { campaigns, formatEnds, formatPrice, getSpecial, savingPercent, specials } from '@/data/specials';
 import { getStore } from '@/data/stores';
+import { share } from '@/lib/dialogs';
+import { goBack } from '@/lib/navigation';
 import { useAppState } from '@/state/app-state';
 import { radius, space, useTheme } from '@/theme';
+
+/** Static web export: one HTML page per special so links can be shared. */
+export function generateStaticParams(): { id: string }[] {
+  return specials.map((s) => ({ id: s.id }));
+}
 
 export default function SpecialDetail() {
   const t = useTheme();
@@ -26,7 +33,7 @@ export default function SpecialDetail() {
     return (
       <Screen tabbed={false} title="Not found">
         <View style={styles.pad}>
-          <Button title="Back to specials" onPress={() => router.back()} />
+          <Button title="Back to specials" onPress={() => goBack('/specials')} />
         </View>
       </Screen>
     );
@@ -38,7 +45,7 @@ export default function SpecialDetail() {
     <View style={{ flex: 1, backgroundColor: t.bg }}>
       <Screen tabbed={false} contentContainerStyle={{ paddingTop: space.lg, paddingBottom: 140 }}>
         <View style={styles.topBar}>
-          <Pressable accessibilityRole="button" accessibilityLabel="Close" onPress={() => router.back()} hitSlop={12} style={[styles.iconBtn, { backgroundColor: t.surface }]}>
+          <Pressable accessibilityRole="button" accessibilityLabel="Close" onPress={() => goBack('/specials')} hitSlop={12} style={[styles.iconBtn, { backgroundColor: t.surface }]}>
             <Text style={{ fontSize: 18, lineHeight: 22 }}>✕</Text>
           </Pressable>
           <View style={{ flexDirection: 'row', gap: space.sm }}>
@@ -47,11 +54,11 @@ export default function SpecialDetail() {
               accessibilityLabel="Share"
               hitSlop={12}
               onPress={() =>
-                Share.share({
-                  message: `${special.name}${special.variant ? ` ${special.variant}` : ''} ${special.size} is ${formatPrice(
+                share(
+                  `${special.name}${special.variant ? ` ${special.variant}` : ''} ${special.size} is ${formatPrice(
                     special.memberPrice,
                   )} for members at Bob's Bulk Booze (non-member ${formatPrice(special.nonMemberPrice)}). Ends ${formatEnds(special.endsOn)}.`,
-                }).catch(() => undefined)
+                )
               }
               style={[styles.iconBtn, { backgroundColor: t.surface }]}>
               <Text style={{ fontSize: 18, lineHeight: 22 }}>↗</Text>

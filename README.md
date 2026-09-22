@@ -1,6 +1,7 @@
 # Bob's Bulk Booze — members app (v2)
 
 A ground-up redesign of the Bob's Bulk Booze members app. Expo SDK 57, Expo Router, TypeScript.
+One codebase for iOS, Android and the web: the web build is a static export deployed on Vercel.
 
 ## Why a redesign
 
@@ -26,11 +27,32 @@ Brand tokens come straight from bobsbulkbooze.com.au: burgundy `#A01C33`, orange
 
 ```sh
 npm install
+npm run web             # dev server in the browser
 npx expo start          # Expo Go works for everything except brightness/location prompts
 npx expo run:ios        # dev build with all native modules
 ```
 
-`npx tsc --noEmit` and `npx expo lint` should both be clean.
+`npm run typecheck` and `npm run lint` should both be clean.
+
+## Web and Vercel
+
+`npm run build` runs `expo export -p web` and writes a static site to `dist/` (one HTML page
+per route, including every special and store via `generateStaticParams`). `vercel.json` sets the
+build command, output directory, clean URLs, an SPA fallback rewrite and immutable caching for
+hashed assets. The GitHub repo is linked to Vercel, so **pushing to `main` deploys**.
+
+What differs on web:
+
+- Tabs come from `src/app/(tabs)/_layout.web.tsx` (headless `expo-router/ui` tabs drawn as a
+  bottom bar); native keeps `NativeTabs`.
+- Wide screens get a centred phone-width frame on a burgundy backdrop (`Frame` in the root
+  layout plus `+html.tsx`), so the mobile layout is never stretched across a desktop.
+- `Alert`/`Share` are no-ops in react-native-web, so screens use `src/lib/dialogs.ts`, which
+  falls back to browser dialogs and the clipboard.
+- Deep links (for example `/special/xxxx-gold`) have no history, so close buttons use
+  `goBack()` from `src/lib/navigation.ts`, which falls back to a sensible route.
+- Brightness boost on the card and haptics are native-only and are skipped.
+- `public/manifest.webmanifest` and `+html.tsx` make it installable as a PWA.
 
 ## Structure
 
@@ -46,8 +68,12 @@ src/app/                 routes (Expo Router)
   age-gate.tsx
 src/components/          Text, Button, Card, Chip, PriceTag, SpecialTile/Row, StoreRow, MemberCard…
 src/data/                stores (real, from the website), specials (4 live + placeholders), member (mock)
-src/state/               persisted app state (AsyncStorage)
+src/lib/                 cross-platform helpers (dialogs, back navigation)
+src/state/               persisted app state (AsyncStorage / localStorage on web)
 src/theme/               tokens: colours, fonts, spacing, radius
+src/app/+html.tsx        root HTML for the static web export (meta, manifest, backdrop)
+public/                  static web files (manifest, PWA icons)
+vercel.json              Vercel build/output/rewrites
 ```
 
 ## What is mocked

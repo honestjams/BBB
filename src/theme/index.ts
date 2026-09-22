@@ -108,12 +108,9 @@ export const radius = {
 /** Minimum comfortable tap target. */
 export const tap = 48;
 
+/** RN 0.76+ / react-native-web support CSS box shadows; the old shadow* props are deprecated. */
 export const shadow = {
   card: {
-    shadowColor: '#5C0E1D',
-    shadowOpacity: 0.08,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 3,
+    boxShadow: '0 6px 16px rgba(92, 14, 29, 0.08)',
   },
 } as const;
